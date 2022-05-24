@@ -28,7 +28,7 @@ And then
 In `Podfile`
 
 ```ruby
-pod 'optool', :git => 'https://github.com/Magic-Unique/MachOKit.git', :tag => '0.1.2'
+pod 'optool', :git => 'https://github.com/Magic-Unique/MachOKit.git', :tag => '0.1.3'
 ```
 
 And then
@@ -36,5 +36,4 @@ And then
 ```c
 #import <optool/optool.h>
 ```
-
 
