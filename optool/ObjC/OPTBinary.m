@@ -81,4 +81,20 @@
     return YES;
 }
 
+- (BOOL)rename:(NSString *)fromPath into:(NSString *)dstPath {
+    if (![self readIfNeed]) {
+        return NO;
+    }
+    struct thin_header headers[4];
+    uint32_t archCount = 0;
+    headersFromBinary(headers, self.contents, &archCount);
+    for (uint32_t i = 0; i < archCount; i++) {
+        struct thin_header macho = headers[i];
+        if (!renameBinary(self.contents, macho, fromPath, dstPath)) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 @end

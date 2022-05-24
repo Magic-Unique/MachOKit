@@ -30,4 +30,6 @@
 
 - (BOOL)uninstall:(NSString *)path;
 
+- (BOOL)rename:(NSString *)fromPath into:(NSString *)dstPath;
+
 @end
