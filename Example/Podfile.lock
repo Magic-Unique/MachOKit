@@ -1,0 +1,32 @@
+PODS:
+  - libMachO (0.1.1)
+  - MachOKit (0.1.1):
+    - libMachO
+  - optool (0.1.3):
+    - optool/Core (= 0.1.3)
+    - optool/ObjC (= 0.1.3)
+  - optool/Core (0.1.3)
+  - optool/ObjC (0.1.3):
+    - optool/Core
+
+DEPENDENCIES:
+  - libMachO (from `../`)
+  - MachOKit (from `../`)
+  - optool (from `../`)
+
+EXTERNAL SOURCES:
+  libMachO:
+    :path: "../"
+  MachOKit:
+    :path: "../"
+  optool:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  libMachO: eb534f859db5feaff272e8ed2e50770fbc679e0e
+  MachOKit: 72dfbceb4f6e04905f67024b94f80fdb677dd793
+  optool: 5408d009031541275ee39b3f7af8ad59868f1718
+
+PODFILE CHECKSUM: 2e36fb7dc478d6ab296d03723f5669d418a5ffb0
+
+COCOAPODS: 1.11.2

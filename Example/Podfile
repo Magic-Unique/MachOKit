@@ -1,0 +1,13 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'Example-iOS' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for MachOKit
+  pod 'libMachO', :path => '../'
+  pod 'MachOKit', :path => '../'
+  pod 'optool', :path => '../'
+
+end
