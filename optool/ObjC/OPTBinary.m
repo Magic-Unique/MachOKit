@@ -97,4 +97,21 @@
     return YES;
 }
 
+- (BOOL)unrestrict:(OPTUnrestrictMethod)method {
+    if (![self readIfNeed]) {
+        return NO;
+    }
+    BOOL soft = method == OPTUnrestrictMethodRename;
+    struct thin_header headers[4];
+    uint32_t archCount = 0;
+    headersFromBinary(headers, self.contents, &archCount);
+    for (uint32_t i = 0; i < archCount; i++) {
+        struct thin_header macho = headers[i];
+        if (!unrestrictBinary(self.contents, macho, soft)) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 @end

@@ -23,6 +23,11 @@
 
 @end
 
+typedef NS_ENUM(NSUInteger, OPTUnrestrictMethod) {
+    OPTUnrestrictMethodRename,  ///< Rename restrict command
+    OPTUnrestrictMethodRemove,  ///< Remove restrict command
+};
+
 
 @interface OPTBinary (Operation)
 
@@ -31,5 +36,7 @@
 - (BOOL)uninstall:(NSString *)path;
 
 - (BOOL)rename:(NSString *)fromPath into:(NSString *)dstPath;
+
+- (BOOL)unrestrict:(OPTUnrestrictMethod)method;
 
 @end
