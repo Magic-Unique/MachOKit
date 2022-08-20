@@ -33,26 +33,26 @@ pod 'optool', :git => 'https://github.com/Magic-Unique/MachOKit.git', :tag => '0
 
 And then
 
-```c
+```objc
 #import <optool/optool.h>
 
 OPTBinary *binary = [OPTBinary binaryWithPath:@"App.app/App"];
 [binary read]; // This step is optional
 // ... do something operations here ...
-BOOL bs = [binary save];
+BOOL bs = [binary save]; // Or save to new path: [binary save:@"App.app/NewApp"]
 
 
-// Support operation:
+// Support operations:
 
 // 1. Delete LC_LOAD_DYLIB
 [binary uninstall:@"@executable_path/xxx.dylib"];
 // 2. Add LC_LOAD_DYLIB
 [binary install:@"@executable_path/xxxxx.dylib"];
 // 3. Redirect LC_LOAD_DYLIB
-[bin rename:@"/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate"
-       into:@"@executable_path/libsubstrate.dylib"]; 
+[binary rename:@"/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate"
+          into:@"@executable_path/libsubstrate.dylib"]; 
 // 4. Disable __RESTRICT
-[bin unrestrict:OPTUnrestrictMethodRename]; // Or OPTUnrestrictMethodRemove
+[binary unrestrict:OPTUnrestrictMethodRename]; // Or OPTUnrestrictMethodRemove
 
 ```
 
