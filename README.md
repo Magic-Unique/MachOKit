@@ -35,5 +35,24 @@ And then
 
 ```c
 #import <optool/optool.h>
+
+OPTBinary *binary = [OPTBinary binaryWithPath:@"App.app/App"];
+[binary read]; // This step is optional
+// ... do something operations here ...
+BOOL bs = [binary save];
+
+
+// Support operation:
+
+// 1. Delete LC_LOAD_DYLIB
+[binary uninstall:@"@executable_path/xxx.dylib"];
+// 2. Add LC_LOAD_DYLIB
+[binary install:@"@executable_path/xxxxx.dylib"];
+// 3. Redirect LC_LOAD_DYLIB
+[bin rename:@"/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate"
+       into:@"@executable_path/libsubstrate.dylib"]; 
+// 4. Disable __RESTRICT
+[bin unrestrict:OPTUnrestrictMethodRename]; // Or OPTUnrestrictMethodRemove
+
 ```
 
