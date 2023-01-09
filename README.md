@@ -28,7 +28,7 @@ And then
 In `Podfile`
 
 ```ruby
-pod 'optool', :git => 'https://github.com/Magic-Unique/MachOKit.git', :tag => '0.1.4'
+pod 'optool', :git => 'https://github.com/Magic-Unique/MachOKit.git', :tag => '0.1.5'
 ```
 
 And then
@@ -52,7 +52,12 @@ BOOL bs = [binary save]; // Or save to new path: [binary save:@"App.app/NewApp"]
 [binary rename:@"/Library/Frameworks/CydiaSubstrate.framework/CydiaSubstrate"
           into:@"@executable_path/libsubstrate.dylib"]; 
 // 4. Disable __RESTRICT
-[binary unrestrict:OPTUnrestrictMethodRename]; // Or OPTUnrestrictMethodRemove
+[binary disbaleRestrict:YES]; // YES for rename content, NO for remove content
+// 5. strip CodeSignature
+[binary stripCodeSignature:YES]; // YES for rename content, NO for remove content
+// 6. disable ASLR
+[binary disableASLR];
+
 
 ```
 

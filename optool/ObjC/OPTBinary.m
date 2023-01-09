@@ -44,74 +44,64 @@
     return [self.contents writeToFile:path atomically:YES];
 }
 
+- (BOOL)enumerateHeadersUsingBlock:(BOOL (^)(struct thin_header macho))block {
+    struct thin_header headers[4];
+    uint32_t archCount = 0;
+    headersFromBinary(headers, self.contents, &archCount);
+    for (uint32_t i = 0; i < archCount; i++) {
+        struct thin_header macho = headers[i];
+        if (!block(macho)) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 @end
 
 @implementation OPTBinary (Operation)
 
 - (BOOL)install:(NSString *)path {
-    if (![self readIfNeed]) {
-        return NO;
-    }
-    struct thin_header headers[4];
-    uint32_t archCount = 0;
-    headersFromBinary(headers, self.contents, &archCount);
-    for (uint32_t i = 0; i < archCount; i++) {
-        struct thin_header macho = headers[i];
+    if (![self readIfNeed]) return NO;
+    return [self enumerateHeadersUsingBlock:^BOOL(struct thin_header macho) {
         uint32_t command = LC_LOAD_DYLIB;
-        if (!insertLoadEntryIntoBinary(path, self.contents, macho, command)) {
-            return NO;
-        }
-    }
-    return YES;
+        return insertLoadEntryIntoBinary(path, self.contents, macho, command);
+    }];
 }
 
 - (BOOL)uninstall:(NSString *)path {
-    if (![self readIfNeed]) {
-        return NO;
-    }
-    struct thin_header headers[4];
-    uint32_t archCount = 0;
-    headersFromBinary(headers, self.contents, &archCount);
-    for (uint32_t i = 0; i < archCount; i++) {
-        struct thin_header macho = headers[i];
-        if (!removeLoadEntryFromBinary(self.contents, macho, path)) {
-            return NO;
-        }
-    }
-    return YES;
+    if (![self readIfNeed]) return NO;
+    return [self enumerateHeadersUsingBlock:^BOOL(struct thin_header macho) {
+        return removeLoadEntryFromBinary(self.contents, macho, path);
+    }];
 }
 
 - (BOOL)rename:(NSString *)fromPath into:(NSString *)dstPath {
-    if (![self readIfNeed]) {
-        return NO;
-    }
-    struct thin_header headers[4];
-    uint32_t archCount = 0;
-    headersFromBinary(headers, self.contents, &archCount);
-    for (uint32_t i = 0; i < archCount; i++) {
-        struct thin_header macho = headers[i];
-        if (!renameBinary(self.contents, macho, fromPath, dstPath)) {
-            return NO;
-        }
-    }
-    return YES;
+    if (![self readIfNeed]) return NO;
+    return [self enumerateHeadersUsingBlock:^BOOL(struct thin_header macho) {
+        return renameBinary(self.contents, macho, fromPath, dstPath);
+    }];
 }
 
-- (BOOL)unrestrict:(OPTUnrestrictMethod)method {
-    if (![self readIfNeed]) {
-        return NO;
-    }
-    BOOL soft = method == OPTUnrestrictMethodRename;
-    struct thin_header headers[4];
-    uint32_t archCount = 0;
-    headersFromBinary(headers, self.contents, &archCount);
-    for (uint32_t i = 0; i < archCount; i++) {
-        struct thin_header macho = headers[i];
-        if (!unrestrictBinary(self.contents, macho, soft)) {
-            return NO;
-        }
-    }
-    return YES;
+- (BOOL)disbaleRestrict:(BOOL)soft {
+    if (![self readIfNeed]) return NO;
+    return [self enumerateHeadersUsingBlock:^BOOL(struct thin_header macho) {
+        return unrestrictBinary(self.contents, macho, soft);
+    }];
+}
+
+- (BOOL)stripCodeSignature:(BOOL)soft {
+    if (![self readIfNeed]) return NO;
+    return [self enumerateHeadersUsingBlock:^BOOL(struct thin_header macho) {
+        return stripCodeSignatureFromBinary(self.contents, macho, soft);
+    }];
+}
+
+- (BOOL)disableASLR {
+    if (![self readIfNeed]) return NO;
+    return [self enumerateHeadersUsingBlock:^BOOL(struct thin_header macho) {
+        return removeASLRFromBinary(self.contents, macho);
+    }];
 }
 
 @end

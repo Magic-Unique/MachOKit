@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'optool'
-  s.version          = '0.1.4'
+  s.version          = '0.1.5'
   s.summary          = 'Pod for optool.'
 
 # This description is used to generate tags and improve search results.
@@ -32,7 +32,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '9.0'
   s.osx.deployment_target = '10.8'
 
-  s.source_files = 'optool/**/*'
+  # s.source_files = 'optool/**/*'
   
   # s.resource_bundles = {
   #   'optool' => ['optool/Assets/*.png']
@@ -41,6 +41,8 @@ Pod::Spec.new do |s|
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
+
+  s.default_subspecs = 'ObjC'
 
   s.subspec "Core" do |ss|
     ss.source_files = 'optool/Core/*'

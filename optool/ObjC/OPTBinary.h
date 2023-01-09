@@ -23,20 +23,32 @@
 
 @end
 
-typedef NS_ENUM(NSUInteger, OPTUnrestrictMethod) {
-    OPTUnrestrictMethodRename,  ///< Rename restrict command
-    OPTUnrestrictMethodRemove,  ///< Remove restrict command
-};
-
 
 @interface OPTBinary (Operation)
 
+/// Inject `LC_DYLIB` to binary
+/// - Parameter path: Load command path
 - (BOOL)install:(NSString *)path;
 
+/// remove `LC_DYLIB` from binary
+/// - Parameter path: Load command path
 - (BOOL)uninstall:(NSString *)path;
 
+/// Rename `LC_DYLIB` load path
+/// - Parameters:
+///   - fromPath: From Path
+///   - dstPath: New Path
 - (BOOL)rename:(NSString *)fromPath into:(NSString *)dstPath;
 
-- (BOOL)unrestrict:(OPTUnrestrictMethod)method;
+/// Unrestrict binary
+/// - Parameter soft: YES for replace content, NO for remove content
+- (BOOL)disbaleRestrict:(BOOL)soft;
+
+/// Remove code signature from binary
+/// - Parameter soft: YES for replace content, NO for remove content
+- (BOOL)stripCodeSignature:(BOOL)soft;
+
+/// Disable ASLR flag from binary (remove `MH_PIE` in Mach-O flags)
+- (BOOL)disableASLR;
 
 @end
